@@ -46,4 +46,4 @@ struct GameState {
     int  selectedCard = -1;
 };
 
-constexpr int COST_MELEE = 10, COST_RANGED = 20, COST_DEFENSE = 30;
+constexpr int COST_MELEE = 10, COST_RANGED = 40, COST_DEFENSE = 60;
