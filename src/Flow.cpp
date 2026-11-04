@@ -26,6 +26,7 @@ static Rect btnStart = {540,380,200,60}, btnSound = {540,300,200,60}, btnExit = 
 static Rect btnA = {540,360,200,60}, btnB = {540,280,200,60}, btnC = {540,200,200,60}; 
 // wave bookkeeping (private to this file)
 static int   waveSize[3] = {3, 5, 10};
+static const float SPAWN_INTERVAL[3] = {5.f, 5.f, 4.f};   // seconds between spawns per wave
 static int   spawned = 0;
 static float spawnTimer = 0;
 
@@ -63,7 +64,7 @@ void flowUpdate(GameState& g, float dt) {
 
     //spawn enemies for the current wave, kol 3 sawani
     spawnTimer += dt;
-    if (g.wave <= 3 && spawned < waveSize[g.wave - 1] && spawnTimer > 3.0f) {
+    if (g.wave <= 3 && spawned < waveSize[g.wave - 1] && spawnTimer > SPAWN_INTERVAL[g.wave - 1]) {
         spawnTimer = 0;
         spawned++;
         int lane = rand() % LANES;

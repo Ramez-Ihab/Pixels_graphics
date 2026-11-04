@@ -8,12 +8,11 @@
 namespace {
 constexpr float CONTACT_DISTANCE = 20.f;
 constexpr float WALK_SPEED = 100.f;
-constexpr float HARD_ENEMY_SPEED = 150.f;
+constexpr float HARD_ENEMY_SPEED = 120.f;
 constexpr float SHOT_SPEED = 320.f;
 constexpr float ATTACK_COOLDOWN = 1.f;
 constexpr float ATTACK_ANIMATION_TIME = 0.25f;
-constexpr float POSE_DURATION = 0.5f;
-constexpr float PICKUP_DISTANCE = 12.f;
+constexpr float POSE_DURATION = 1.0f;
 
 void addUnit(GameState& state, UnitType type, int lane, bool isPlayer, int hp) {
     if (lane < 0 || lane >= LANES) {
@@ -189,20 +188,6 @@ void moveProjectiles(GameState& state, float dt, const std::vector<float>& start
     }
 }
 
-void collectDrops(GameState& state, const std::vector<float>& startX) {
-    auto& drops = state.collectibles;
-    drops.erase(std::remove_if(drops.begin(), drops.end(), [&](const Collectible& drop) {
-        for (std::size_t i = 0; i < state.units.size(); ++i) {
-            const Unit& unit = state.units[i];
-            if (unit.isPlayer && unit.hp > 0 && unit.lane == drop.lane &&
-                drop.x >= startX[i] - PICKUP_DISTANCE && drop.x <= unit.x + PICKUP_DISTANCE) {
-                ++state.coins;
-                return true;
-            }
-        }
-        return false;
-    }), drops.end());
-}
 }  // namespace
 
 void combatReset(GameState& state) {
@@ -240,8 +225,7 @@ void combatUpdate(GameState& state, float dt) {
         }
     }
 
-    // The indices in startX are valid until the defeated units are erased.
-    collectDrops(state, startX);
+    // Coin pickup is handled in Flow (flowUpdate), so it is not done here.
     auto& units = state.units;
     units.erase(std::remove_if(units.begin(), units.end(),
                               [](const Unit& unit) { return unit.hp <= 0; }), units.end());
