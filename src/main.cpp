@@ -61,6 +61,7 @@ int main() {
     }
     flowInit(g);
 
+
     float cutT = 0.f;
     double last = glfwGetTime();
     while (!glfwWindowShouldClose(window)) {
