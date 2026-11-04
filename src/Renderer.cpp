@@ -393,4 +393,169 @@ void drawGame(const GameState& game)
 }
 
 
+// Draws a small character icon inside a purchase card.
+// pos is the center of the icon.
+// size controls the overall icon dimensions.
+// grayscale is true when the card is locked or unavailable.
+void drawUnitIcon(UnitType type, glm::vec2 pos, float size, bool grayscale)
+{
+    // Define the original colors for the icon.
+    glm::vec4 bodyColor;
+    glm::vec4 detailColor;
+
+    // Assign different colors depending on the character type.
+    switch (type)
+    {
+        case UnitType::Melee:
+            bodyColor = {0.15f, 0.30f, 0.85f, 1.0f};
+            detailColor = {0.95f, 0.75f, 0.15f, 1.0f};
+            break;
+
+        case UnitType::Ranged:
+            bodyColor = {0.15f, 0.65f, 0.30f, 1.0f};
+            detailColor = {0.85f, 0.65f, 0.35f, 1.0f};
+            break;
+
+        case UnitType::Defense:
+            bodyColor = {0.45f, 0.45f, 0.55f, 1.0f};
+            detailColor = {0.95f, 0.75f, 0.15f, 1.0f};
+            break;
+
+        case UnitType::EnemyUpper:
+            bodyColor = {0.50f, 0.15f, 0.65f, 1.0f};
+            detailColor = {1.0f, 0.20f, 0.20f, 1.0f};
+            break;
+
+        case UnitType::EnemyLower:
+            bodyColor = {0.70f, 0.25f, 0.15f, 1.0f};
+            detailColor = {1.0f, 0.65f, 0.10f, 1.0f};
+            break;
+
+        case UnitType::EnemyMelee:
+            bodyColor = {0.45f, 0.10f, 0.10f, 1.0f};
+            detailColor = {0.95f, 0.15f, 0.10f, 1.0f};
+            break;
+    }
+
+    // Convert the colors to grayscale for locked cards.
+    if (grayscale)
+    {
+        auto toGray = [](glm::vec4 color)
+        {
+            float gray = 0.299f * color.r
+                       + 0.587f * color.g
+                       + 0.114f * color.b;
+
+            return glm::vec4(gray, gray, gray, color.a);
+        };
+
+        bodyColor = toGray(bodyColor);
+        detailColor = toGray(detailColor);
+    }
+
+    // Scale all icon dimensions relative to the requested size.
+    float s = size / 50.0f;
+
+    // Draw the character's main body.
+    drawRect(
+        {pos.x - 12.0f * s, pos.y - 12.0f * s},
+        {24.0f * s, 28.0f * s},
+        bodyColor
+    );
+
+    // Draw the character's head.
+    drawCircle(
+        {pos.x, pos.y + 20.0f * s},
+        9.0f * s,
+        detailColor
+    );
+
+    // Add character-specific equipment.
+    switch (type)
+    {
+        case UnitType::Melee:
+            // Knight sword and shield.
+            drawRect(
+                {pos.x + 13.0f * s, pos.y - 2.0f * s},
+                {4.0f * s, 27.0f * s},
+                detailColor
+            );
+
+            drawCircle(
+                {pos.x - 17.0f * s, pos.y + 2.0f * s},
+                9.0f * s,
+                detailColor
+            );
+            break;
+
+        case UnitType::Ranged:
+            // Archer bow.
+            drawTriangle(
+                {pos.x + 17.0f * s, pos.y + 3.0f * s},
+                {12.0f * s, 30.0f * s},
+                0.0f,
+                detailColor
+            );
+            break;
+
+        case UnitType::Defense:
+            // Guardian shield.
+            drawRect(
+                {pos.x + 12.0f * s, pos.y - 12.0f * s},
+                {13.0f * s, 35.0f * s},
+                detailColor
+            );
+            break;
+
+        case UnitType::EnemyUpper:
+            // Flying enemy wings.
+            drawTriangle(
+                {pos.x - 19.0f * s, pos.y + 8.0f * s},
+                {18.0f * s, 25.0f * s},
+                -0.5f,
+                detailColor
+            );
+
+            drawTriangle(
+                {pos.x + 19.0f * s, pos.y + 8.0f * s},
+                {18.0f * s, 25.0f * s},
+                0.5f,
+                detailColor
+            );
+            break;
+
+        case UnitType::EnemyLower:
+            // Horns of the lower enemy.
+            drawTriangle(
+                {pos.x - 9.0f * s, pos.y + 29.0f * s},
+                {10.0f * s, 15.0f * s},
+                -0.5f,
+                detailColor
+            );
+
+            drawTriangle(
+                {pos.x + 9.0f * s, pos.y + 29.0f * s},
+                {10.0f * s, 15.0f * s},
+                0.5f,
+                detailColor
+            );
+            break;
+
+        case UnitType::EnemyMelee:
+            // Heavy enemy weapon.
+            drawRect(
+                {pos.x + 13.0f * s, pos.y - 15.0f * s},
+                {6.0f * s, 40.0f * s},
+                detailColor
+            );
+
+            drawCircle(
+                {pos.x + 16.0f * s, pos.y + 25.0f * s},
+                8.0f * s,
+                detailColor
+            );
+            break;
+    }
+}
+
 
