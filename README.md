@@ -6,7 +6,7 @@ Defend the castle across four lanes and three enemy waves. Spend coins to deploy
 
 ## 📸 Game screenshot
 
-![Wave 1 showing the castle, four lanes, unit cards, and coin counter](assets/gameplay.jpg)
+<img width="1026" height="607" alt="gameplay" src="https://github.com/user-attachments/assets/ebf213ea-e492-44f0-9748-6e61db6e7634" />
 
 ## 🚀 Build and run on Windows
 
